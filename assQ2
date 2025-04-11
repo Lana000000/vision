@@ -1,0 +1,43 @@
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+
+image_path = "C:\\Users\\lanat\\Desktop\\id_img.jpg"
+
+if not os.path.exists(image_path):
+    print(" Image not found at the specified path!")
+else:
+    id_image = cv2.imread(image_path)
+    id_image = cv2.resize(id_image, (600, 400))
+
+    name = "Lana Tarek"
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    font_scale = 1
+    thickness = 2
+    text_position = (50, 350)
+
+    cv2.putText(id_image, name, text_position, font, font_scale, (0, 0, 0), thickness)
+
+    text_size = cv2.getTextSize(name, font, font_scale, thickness)[0]
+    x_start = text_position[0]
+    y_start = text_position[1] + 10
+    x_end = x_start + text_size[0]
+    cv2.line(id_image, (x_start, y_start), (x_end, y_start), (0, 0, 255), 2)
+
+    height, width = id_image.shape[:2]
+    corners = [(0, 0), (width-1, 0), (0, height-1), (width-1, height-1)]
+    for point in corners:
+        cv2.circle(id_image, point, 10, (255, 0, 0), -1)
+
+    fig, axs = plt.subplots(2, 2, figsize=(10, 8))
+    alphas = [1.0, 0.75, 0.5, 0.25]
+    titles = [f'Alpha = {a}' for a in alphas]
+
+    for ax, alpha, title in zip(axs.flat, alphas, titles):
+        ax.imshow(cv2.cvtColor(id_image, cv2.COLOR_BGR2RGB), alpha=alpha)
+        ax.set_title(title)
+        ax.axis('off')
+
+    plt.tight_layout()
+    plt.show()
